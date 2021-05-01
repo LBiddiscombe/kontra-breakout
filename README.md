@@ -1,5 +1,5 @@
-Astravoid - a game trying out Kontra.js
-=======================================
+Breakout Clone - a game trying out Kontra.js
+============================================
 
 Scripts
 -------
