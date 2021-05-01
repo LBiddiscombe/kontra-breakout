@@ -1,4 +1,5 @@
 import { Pool, Sprite, getCanvas } from 'kontra'
+import { levels } from './levels'
 import { generateHslColors } from '../../shared/helpers'
 
 let blocks = Pool({
@@ -21,6 +22,7 @@ function createBlocks() {
 
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
+      if (levels[2][i][j] != 'X') continue
       blocks.get({
         x: j * (width + padding) + offsetX,
         y: i * (height + padding) + offsetY,
