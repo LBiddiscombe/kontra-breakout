@@ -30,19 +30,21 @@ function circleRect(circle, rect) {
 
   collides = difference.length() < circle.radius
 
-  if (!collides) return { collides: false, collisionPosition, resolvedVelocity }
+  if (!collides || rect.ttl <= 0) return { collides: false, collisionPosition, resolvedVelocity }
 
   // calculate collisionPosition
   const collisionDirection = circle.velocity.normalize()
   const overlap = circle.radius - difference.length() + 1
   collisionPosition = circle.position.subtract(collisionDirection.scale(overlap))
 
-  // which face was collided - use dot product of difference and block faces normal vector - lowest negative is the face hit
-  //if (difference.length === 0) difference = collisionDirection
-
   let bestMatch = Infinity
   for (const prop in edgeNormals) {
     if (difference.dot(edgeNormals[prop]) < bestMatch) {
+      // ignore obvious errors
+      if (prop === 'top' && circle.dy < 0) continue
+      if (prop === 'bottom' && circle.dy > 0) continue
+      if (prop === 'right' && circle.dx > 0) continue
+      if (prop === 'left' && circle.dx < 0) continue
       bestMatch = difference.dot(edgeNormals[prop])
       edge = edgeNormals[prop]
       isTop = prop === 'top'
