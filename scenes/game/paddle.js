@@ -13,6 +13,7 @@ function createPaddle() {
     color: 'white',
     deflectAngle: true,
     pointerDown: false,
+    holdingBall: null,
     update: function () {
       this.advance()
     },
@@ -21,6 +22,9 @@ function createPaddle() {
     },
     onUp: function () {
       this.pointerDown = false
+      if (this.holdingBall) {
+        this.holdingBall = false
+      }
     },
     update: function () {
       if (this.pointerDown) {

@@ -6,7 +6,7 @@ let blocks = Pool({
   create: Sprite,
 })
 
-function createBlocks() {
+function createBlocks(level) {
   const canvas = getCanvas()
   const cols = 8
   const rows = 6
@@ -18,9 +18,11 @@ function createBlocks() {
 
   const colors = generateHslColors(100, 60, rows)
 
+  blocks.clear()
+
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
-      if (levels[2][i][j] != 'X') continue
+      if (levels[level - 1][i][j] != 'X') continue
       blocks.get({
         x: j * (width + padding) + offsetX,
         y: i * (height + padding) + offsetY,

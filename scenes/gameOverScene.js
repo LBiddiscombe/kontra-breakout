@@ -53,8 +53,8 @@ export function createGameOverScene() {
       clearTimeout(timer)
     },
     onShow: function () {
-      score.text = `Score: ${getStoreItem('score')}`
-      hiscore.text = `Hi-Score: ${getStoreItem('hiscore')}`
+      score.text = `Score: ${getStoreItem('breakoutScore') || 0}`
+      hiscore.text = `Hi-Score: ${getStoreItem('breakoutHiscore') || 0}`
       timer = setTimeout(() => {
         emit('navigate', 'menu')
       }, 2000)

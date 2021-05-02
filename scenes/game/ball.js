@@ -5,9 +5,7 @@ function createBall() {
 
   let ball = Sprite({
     x: canvas.width / 2,
-    y: canvas.height / 2,
-    dx: 2,
-    dy: -8,
+    y: canvas.height - 105,
     radius: 8,
     anchor: { x: 0.5, y: 0.5 },
     update: function () {
@@ -16,7 +14,7 @@ function createBall() {
         ball.dx *= -1
         ball.x += ball.dx
       }
-      if (ball.y < this.radius || ball.y > canvas.height - this.radius) {
+      if (ball.y < this.radius) {
         ball.dy *= -1
         ball.y += ball.dy
       }

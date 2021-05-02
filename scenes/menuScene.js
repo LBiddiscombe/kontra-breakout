@@ -1,4 +1,5 @@
 import { Text, Grid, Vector, Scene, getCanvas, emit, getStoreItem, track, untrack } from 'kontra'
+import { choose } from '../shared/helpers'
 
 export function createMenuScene() {
   const canvas = getCanvas()
@@ -90,8 +91,8 @@ export function createMenuScene() {
     height: canvas.height,
     children: [title, menu],
     onShow: function () {
-      lastScore.text = `Last Score: ${getStoreItem('score') || 0}`
-      hiScore.text = `Hi-Score: ${getStoreItem('hiscore') || 0}`
+      lastScore.text = `Last Score: ${getStoreItem('breakoutScore') || 0}`
+      hiScore.text = `Hi-Score: ${getStoreItem('breakoutHiscore') || 0}`
     },
     onHide: function () {
       untrack(scene)
@@ -99,7 +100,7 @@ export function createMenuScene() {
     onDown: function () {
       menu.children = [tapToStart, instructions, countdown]
 
-      emit('navigate', 'game')
+      emit('navigate', 'game', 1)
       // const timer = setInterval(() => {
       //   countdown.value -= 1
       //   if (countdown.value <= 0) {

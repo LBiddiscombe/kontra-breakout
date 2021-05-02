@@ -15,7 +15,7 @@ const bootScene = createBootScene()
 let currentScene = bootScene
 currentScene.show()
 
-on('navigate', (name) => {
+on('navigate', (name, level = null) => {
   currentScene.hide()
   currentScene.destroy()
 
@@ -24,7 +24,7 @@ on('navigate', (name) => {
       currentScene = createMenuScene()
       break
     case 'game':
-      currentScene = createGameScene()
+      currentScene = createGameScene(level)
       break
     case 'gameOver':
       currentScene = createGameOverScene()

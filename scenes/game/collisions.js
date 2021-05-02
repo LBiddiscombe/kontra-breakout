@@ -51,6 +51,15 @@ function circleRect(circle, rect) {
     }
   }
 
+  // if we get here without detecting an edge make the most obvious choice
+  if (edge === null) {
+    console.log(circle)
+    if (circle.dy > 0) {
+      edge = edgeNormals.top
+      isTop = true
+    } else edge = edgeNormals.bottom
+  }
+
   // add some deflection angles just for the paddle
   //top: Vector(0, -1) in middle, (-0.196, -0.981) on left, (0.196, -0.981) on right
   if (isTop && rect.deflectAngle) {
