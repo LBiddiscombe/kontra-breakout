@@ -32,7 +32,7 @@ export function createGameScene(level = 0) {
     id: 'game',
     width: canvas.width,
     height: canvas.height,
-    children: [ball, blocks, paddle, scoreUI],
+    children: [blocks, paddle, scoreUI],
     onShow: function () {
       track(paddle)
       track(scene)
@@ -43,7 +43,6 @@ export function createGameScene(level = 0) {
       clearTimeout(newLevelTimer)
     },
     onDown: function () {
-      paddle.pointerDown = true
       if (Math.abs(pointer.x - paddle.x) < paddle.width) paddle.pointerDown = true
     },
     onUp: function () {
@@ -56,6 +55,7 @@ export function createGameScene(level = 0) {
     },
     update: function () {
       this.advance()
+      if (ball.ttl > 0) ball.update()
 
       // if ball is held follow paddle
       if (paddle.holdingBall === true) {
@@ -89,7 +89,7 @@ export function createGameScene(level = 0) {
       })
 
       // if ball drop game over
-      if (ball.y > canvas.height) {
+      if (ball.y > canvas.height && ball.ttl > 0) {
         setStoreItem('breakoutScore', scoreUI.value)
         if (scoreUI.value > getStoreItem('breakoutHiscore')) {
           setStoreItem('breakoutHiscore', scoreUI.value)
@@ -100,6 +100,7 @@ export function createGameScene(level = 0) {
       // start a new level when all blocks removed
       if (aliveBlocks.length === 0 && !newLevelTimer) {
         setStoreItem('breakoutScore', scoreUI.value)
+        ball.ttl = 0
         newLevelTimer = setTimeout(() => {
           const newLevel = (level + 1) % numLevels
           emit('navigate', 'game', newLevel)
@@ -110,6 +111,7 @@ export function createGameScene(level = 0) {
       this.draw()
 
       // custom rendering here
+      ball.render()
       blocks.render()
     },
   })
