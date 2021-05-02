@@ -5,21 +5,25 @@ import { createBlocks, blocks } from './blocks'
 import { circleRect } from './collisions'
 import { numLevels } from './config'
 
-export function createGameScene(level) {
-  let newLevelTimer
-
+export function createGameScene(level = 1) {
+  const carriedForwardScore = getStoreItem('breakoutScore') || 0
   const canvas = getCanvas()
   const pointer = getPointer()
 
+  let newLevelTimer
   let ball = createBall()
   let paddle = createPaddle()
   createBlocks(level)
 
+  if (carriedForwardScore > 0) {
+    paddle.holdingBall = true
+  }
+
   let scoreUI = Text({
-    value: 0,
+    value: carriedForwardScore,
     x: 10,
     y: 10,
-    text: 'Score: 0',
+    text: `Score: ${carriedForwardScore}`,
     color: 'white',
     font: '32px Bowlby One SC',
   })
@@ -93,8 +97,10 @@ export function createGameScene(level) {
 
       // start a new level when all blocks removed
       if (aliveBlocks.length === 0 && !newLevelTimer) {
+        setStoreItem('breakoutScore', scoreUI.value)
         newLevelTimer = setTimeout(() => {
-          emit('navigate', 'game', randInt(1, numLevels))
+          const newLevel = (level + 1) % numLevels
+          emit('navigate', 'game', newLevel)
         }, 1000)
       }
     },

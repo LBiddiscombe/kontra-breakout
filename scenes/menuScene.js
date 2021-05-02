@@ -1,5 +1,4 @@
-import { Text, Grid, Vector, Scene, getCanvas, emit, getStoreItem, track, untrack } from 'kontra'
-import { choose } from '../shared/helpers'
+import { Text, Grid, Scene, getCanvas, emit, getStoreItem, setStoreItem, track, untrack } from 'kontra'
 
 export function createMenuScene() {
   const canvas = getCanvas()
@@ -69,7 +68,7 @@ export function createMenuScene() {
     },
     onDown: function () {
       menu.children = [tapToStart, instructions, countdown]
-
+      setStoreItem('breakoutScore', undefined)
       emit('navigate', 'game', 1)
       // const timer = setInterval(() => {
       //   countdown.value -= 1
