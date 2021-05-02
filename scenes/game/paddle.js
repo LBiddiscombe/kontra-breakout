@@ -46,17 +46,14 @@ function createPaddle() {
       var endAngle2 = Math.PI * 0.5
       var antiClockwise2 = false
 
-      this.context.fillStyle = 'silver'
+      this.context.fillStyle = 'yellow'
       this.context.beginPath()
       this.context.arc(x1, y1, radius1, startAngle1, endAngle1, antiClockwise1)
-      this.context.lineTo(200, 0)
+      this.context.lineTo(90, 0)
       this.context.arc(x2, y2, radius2, startAngle2, endAngle2, antiClockwise2)
       this.context.closePath()
       this.context.lineWidth = 4
       this.context.fill()
-
-      // this.context.strokeStyle = 'red'
-      // this.context.strokeRect(0, 0, this.width, this.height)
     },
   })
 

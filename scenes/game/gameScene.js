@@ -1,4 +1,4 @@
-import { Scene, track, untrack, getCanvas, getPointer, emit, randInt } from 'kontra'
+import { Scene, Text, track, untrack, getCanvas, getPointer, emit, randInt, setStoreItem, getStoreItem } from 'kontra'
 import { createBall } from './ball'
 import { createPaddle } from './paddle'
 import { createBlocks, blocks } from './blocks'
@@ -15,11 +15,20 @@ export function createGameScene(level) {
   let paddle = createPaddle()
   createBlocks(level)
 
+  let scoreUI = Text({
+    value: 0,
+    x: 10,
+    y: 10,
+    text: 'Score: 0',
+    color: 'white',
+    font: '32px Bowlby One SC',
+  })
+
   let scene = Scene({
     id: 'game',
     width: canvas.width,
     height: canvas.height,
-    children: [ball, blocks, paddle],
+    children: [ball, blocks, paddle, scoreUI],
     onShow: function () {
       track(paddle)
       track(scene)
@@ -67,11 +76,18 @@ export function createGameScene(level) {
           block.ttl = 0
           ball.position = collision.collisionPosition
           ball.velocity = collision.resolvedVelocity
+          // update score
+          scoreUI.value += 1
+          scoreUI.text = 'Score: ' + scoreUI.value
         }
       })
 
       // if ball drop game over
       if (ball.y > canvas.height) {
+        setStoreItem('breakoutScore', scoreUI.value)
+        if (scoreUI.value > getStoreItem('breakoutHiscore')) {
+          setStoreItem('breakoutHiscore', scoreUI.value)
+        }
         emit('navigate', 'gameOver')
       }
 

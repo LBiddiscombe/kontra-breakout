@@ -9,71 +9,41 @@ export function createMenuScene() {
     x: canvas.width / 2,
     y: 50,
     color: '#4deeea',
-    font: 'Bold 48px Comfortaa',
+    font: '48px Bowlby One SC',
     anchor: { x: 0.5, y: 0.5 },
-    render: function () {
-      this.context.shadowBlur = 12
-      this.context.shadowColor = this.color
-      this.draw()
-    },
   })
 
   let tapToStart = Text({
     text: 'Tap to Start',
     color: '#74ee15',
-    font: 'Bold 32px Comfortaa',
+    font: '32px Bowlby One SC',
     anchor: { x: 0.5, y: 0.5 },
-    render: function () {
-      this.context.shadowBlur = 8
-      this.context.shadowColor = this.color
-      this.draw()
-    },
   })
 
   let instructions = Text({
-    text: "It's Breakout, you know the deal.",
+    text: "It's Breakout, you know the deal",
     color: '#4deeea',
-    font: 'Bold 16px Comfortaa',
+    font: '16px Bowlby One SC',
     anchor: { x: 0.5, y: 0.5 },
-    render: function () {
-      this.context.shadowBlur = 4
-      this.context.shadowColor = this.color
-      this.draw()
-    },
   })
 
   let lastScore = Text({
     text: 'Last Score',
     color: '#4deeea',
-    font: '24px Comfortaa',
-    render: function () {
-      this.context.shadowBlur = 6
-      this.context.shadowColor = this.color
-      this.draw()
-    },
+    font: '24px Bowlby One SC',
   })
 
   let hiScore = Text({
     text: 'Hi Score',
     color: '#ffe700',
-    font: '24px Comfortaa',
-    render: function () {
-      this.context.shadowBlur = 6
-      this.context.shadowColor = this.color
-      this.draw()
-    },
+    font: '24px Bowlby One SC',
   })
 
   let countdown = Text({
     text: '3',
     value: 3,
     color: '#74ee15',
-    font: '64px Comfortaa',
-    render: function () {
-      this.context.shadowBlur = 16
-      this.context.shadowColor = this.color
-      this.draw()
-    },
+    font: '64px Bowlby One SC',
   })
 
   let menu = Grid({
