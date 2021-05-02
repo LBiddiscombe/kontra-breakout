@@ -8,7 +8,7 @@ function createPaddle() {
     x: canvas.width / 2,
     y: canvas.height - 120,
     width: 100,
-    height: 30,
+    height: 20,
     anchor: { x: 0.5, y: 0.5 },
     color: 'white',
     deflectAngle: true,
@@ -32,28 +32,16 @@ function createPaddle() {
       }
     },
     render: function () {
-      var x1 = 10
-      var y1 = 10
-      var radius1 = 10
-      var startAngle1 = Math.PI * 0.5
-      var endAngle1 = Math.PI * 1.5
-      var antiClockwise1 = false
+      let p = new Path2D(
+        'M90 0C95.52 0 100 4.48 100 10C100 12 100 8 100 10C100 15.52 95.52 20 90 20C72 20 28 20 10 20C4.48 20 0 15.52 0 10C0 8 0 12 0 10C0 4.48 4.48 0 10 0C28 0 72 0 90 0Z'
+      )
+      this.context.fillStyle = 'white'
+      this.context.fill(p)
 
-      var x2 = 90
-      var y2 = 10
-      var radius2 = 10
-      var startAngle2 = Math.PI * 1.5
-      var endAngle2 = Math.PI * 0.5
-      var antiClockwise2 = false
-
-      this.context.fillStyle = 'yellow'
-      this.context.beginPath()
-      this.context.arc(x1, y1, radius1, startAngle1, endAngle1, antiClockwise1)
-      this.context.lineTo(90, 0)
-      this.context.arc(x2, y2, radius2, startAngle2, endAngle2, antiClockwise2)
-      this.context.closePath()
-      this.context.lineWidth = 4
-      this.context.fill()
+      // // debug hitbox
+      // this.context.strokeStyle = 'red'
+      // this.context.lineWidth = 2
+      // this.context.strokeRect(0, 0, this.width, this.height)
     },
   })
 

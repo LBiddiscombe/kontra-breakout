@@ -5,7 +5,7 @@ function createBall() {
 
   let ball = Sprite({
     x: canvas.width / 2,
-    y: canvas.height - 145,
+    y: canvas.height - 140,
     radius: 8,
     anchor: { x: 0.5, y: 0.5 },
     update: function () {
