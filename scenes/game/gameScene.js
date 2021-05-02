@@ -5,7 +5,7 @@ import { createBlocks, blocks } from './blocks'
 import { circleRect } from './collisions'
 import { numLevels } from './config'
 
-export function createGameScene(level = 1) {
+export function createGameScene(level = 0) {
   const carriedForwardScore = getStoreItem('breakoutScore') || 0
   const canvas = getCanvas()
   const pointer = getPointer()

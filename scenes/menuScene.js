@@ -69,7 +69,7 @@ export function createMenuScene() {
     onDown: function () {
       menu.children = [tapToStart, instructions, countdown]
       setStoreItem('breakoutScore', undefined)
-      emit('navigate', 'game', 1)
+      emit('navigate', 'game', 0)
       // const timer = setInterval(() => {
       //   countdown.value -= 1
       //   if (countdown.value <= 0) {

@@ -23,7 +23,7 @@ function createBlocks(level) {
 
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
-      if (levels[level - 1][i][j] != 'X') continue
+      if (levels[level][i][j] != 'X') continue
       blocks.get({
         x: j * (width + padding) + offsetX,
         y: i * (height + padding) + offsetY,
