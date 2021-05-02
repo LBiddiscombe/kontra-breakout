@@ -6,7 +6,7 @@ function createPaddle() {
 
   let paddle = Sprite({
     x: canvas.width / 2,
-    y: canvas.height - 80,
+    y: canvas.height - 120,
     width: 100,
     height: 30,
     anchor: { x: 0.5, y: 0.5 },
