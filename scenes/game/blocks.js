@@ -18,8 +18,6 @@ function createBlocks() {
 
   const colors = generateHslColors(100, 60, rows)
 
-  console.log(colors)
-
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < cols; j++) {
       if (levels[2][i][j] != 'X') continue
