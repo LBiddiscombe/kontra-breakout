@@ -15,13 +15,7 @@ export function createBootScene() {
 
   let preloadFont1 = Text({
     color: '#FF7F00',
-    font: '48px Comfortaa',
-    anchor: { x: 0.5, y: 0.5 },
-  })
-
-  let preloadFont2 = Text({
-    color: '#FF7F00',
-    font: 'Bold 48px Comfortaa',
+    font: '48px Bowlby One SC',
     anchor: { x: 0.5, y: 0.5 },
   })
 
@@ -43,7 +37,7 @@ export function createBootScene() {
     y: canvas.height / 2,
     rowGap: 4,
     anchor: { x: 0.5, y: 0.5 },
-    children: [loadingText, loadingBar, preloadFont1, preloadFont2],
+    children: [loadingText, loadingBar, preloadFont1],
   })
 
   const bootScene = Scene({
