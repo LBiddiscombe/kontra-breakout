@@ -72,11 +72,13 @@ export function createGameScene(level = 0) {
         ball.velocity = collision.resolvedVelocity
       }
 
-      // check collision of blocks
+      // check collision of blocks, only destroy 1 brick per update
+      let collisionsActive = true
       const aliveBlocks = blocks.getAliveObjects()
       aliveBlocks.forEach((block) => {
         const collision = circleRect(ball, block)
-        if (collision.collides) {
+        if (collision.collides && collisionsActive) {
+          collisionsActive = false
           block.ttl = 0
           ball.position = collision.collisionPosition
           ball.velocity = collision.resolvedVelocity
