@@ -6,8 +6,8 @@ import { createGameScene } from './scenes/game/gameScene'
 import { createGameOverScene } from './scenes/gameOverScene'
 
 const { canvas } = init()
-canvas.width = Math.min(window.innerWidth, 768)
-canvas.height = window.innerHeight
+// canvas.width = Math.min(window.innerWidth, 768)
+// canvas.height = window.innerHeight
 
 initPointer()
 
