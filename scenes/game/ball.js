@@ -21,8 +21,13 @@ function createBall() {
     },
     render: function () {
       this.context.beginPath()
-      this.context.fillStyle = 'white'
+      this.context.fillStyle = 'lightgrey'
       this.context.arc(0, 0, this.radius, 0, Math.PI * 2)
+      this.context.fill()
+
+      this.context.beginPath()
+      this.context.fillStyle = 'white'
+      this.context.arc(-1, -2, this.radius - 2, 0, Math.PI * 2)
       this.context.fill()
     },
   })

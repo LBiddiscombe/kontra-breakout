@@ -32,13 +32,19 @@ function createPaddle() {
       }
     },
     render: function () {
-      let p = new Path2D(
-        'M90 0C95.52 0 100 4.48 100 10C100 12 100 8 100 10C100 15.52 95.52 20 90 20C72 20 28 20 10 20C4.48 20 0 15.52 0 10C0 8 0 12 0 10C0 4.48 4.48 0 10 0C28 0 72 0 90 0Z'
+      let shadowPath = new Path2D(
+        'm 90 5 c 5.5 0 10 4.5 10 10 c 0 2 0 -2 0 0 c 0 5.5 -4.5 10 -10 10 c -18 0 -62 0 -80 0 c -5.5 0 -10 -4.5 -10 -10 c 0 -2 0 2 0 0 c 0 -5.5 4.5 -10 10 -10 c 18 0 62 0 80 0 z'
       )
-      this.context.fillStyle = 'white'
-      this.context.fill(p)
+      let path = new Path2D(
+        'm 90 0 c 5.5 0 10 4.5 10 10 c 0 2 0 -2 0 0 c 0 5.5 -4.5 10 -10 10 c -18 0 -62 0 -80 0 c -5.5 0 -10 -4.5 -10 -10 c 0 -2 0 2 0 0 c 0 -5.5 4.5 -10 10 -10 c 18 0 62 0 80 0 z'
+      )
 
-      // // debug hitbox
+      this.context.fillStyle = 'lightgrey'
+      this.context.fill(shadowPath)
+      this.context.fillStyle = 'white'
+      this.context.fill(path)
+
+      // debug hitbox
       // this.context.strokeStyle = 'red'
       // this.context.lineWidth = 2
       // this.context.strokeRect(0, 0, this.width, this.height)
