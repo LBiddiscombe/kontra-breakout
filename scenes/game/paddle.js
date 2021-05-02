@@ -1,7 +1,8 @@
-import { Sprite, getCanvas } from 'kontra'
+import { Sprite, getCanvas, getPointer } from 'kontra'
 
 function createPaddle() {
   const canvas = getCanvas()
+  const pointer = getPointer()
 
   let paddle = Sprite({
     x: canvas.width / 2,
@@ -11,8 +12,20 @@ function createPaddle() {
     anchor: { x: 0.5, y: 0.5 },
     color: 'white',
     deflectAngle: true,
+    pointerDown: false,
     update: function () {
       this.advance()
+    },
+    onDown: function () {
+      this.pointerDown = true
+    },
+    onUp: function () {
+      this.pointerDown = false
+    },
+    update: function () {
+      if (this.pointerDown) {
+        paddle.x = pointer.x
+      }
     },
     render: function () {
       var x1 = 10

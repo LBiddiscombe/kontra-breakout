@@ -1,4 +1,4 @@
-import { Scene, track, untrack, getCanvas, getPointer } from 'kontra'
+import { Scene, track, untrack, getCanvas } from 'kontra'
 import { createBall } from './ball'
 import { createPaddle } from './paddle'
 import { createBlocks, blocks } from './blocks'
@@ -6,7 +6,6 @@ import { circleRect } from './collisions'
 
 export function createGameScene() {
   const canvas = getCanvas()
-  const pointer = getPointer()
 
   let ball = createBall()
   let paddle = createPaddle()
@@ -19,16 +18,25 @@ export function createGameScene() {
     children: [ball, blocks, paddle],
     onShow: function () {
       track(paddle)
+      track(scene)
     },
     onHide: function () {
       untrack(paddle)
+      untrack(scene)
+    },
+    onUp: function () {
+      paddle.pointerDown = false
     },
     update: function () {
       this.advance()
-      paddle.x = pointer.x
+      // check collision of paddle
+      const collision = circleRect(ball, paddle)
+      if (collision.collides) {
+        ball.position = collision.collisionPosition
+        ball.velocity = collision.resolvedVelocity
+      }
 
       const aliveBlocks = blocks.getAliveObjects()
-      aliveBlocks.push(paddle)
       aliveBlocks.forEach((block) => {
         const collision = circleRect(ball, block)
         if (collision.collides) {
