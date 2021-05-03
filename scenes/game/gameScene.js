@@ -24,7 +24,7 @@ export function createGameScene(level = 0) {
   const carriedForwardScore = getStoreItem('breakoutScore') || 0
   const canvas = getCanvas()
   const pointer = getPointer()
-  const powerUpOdds = 1 //1 in 'this' blocks will spawn a powerup pill
+  const powerUpOdds = 5 //1 in 'this' blocks will spawn a powerup pill
 
   let pill = null
   let newLevelTimer
@@ -67,7 +67,7 @@ export function createGameScene(level = 0) {
             break
           case type.name === 'StickyBall':
             paddle.color = 'limegreen'
-            paddle.accentColor = 'seagreen'
+            paddle.accentColor = 'forestgreen'
             break
         }
       })
