@@ -116,7 +116,7 @@ export function createGameScene(level = 0) {
           }
           scoreUI.value += 1
           scoreUI.text = 'Score: ' + scoreUI.value
-          if (!pill && !pillActive && randInt(1, 5) === 1) pill = createPill(block.x, block.y)
+          if (!pill && !this.pillActive && randInt(1, 5) === 1) pill = createPill(block.x, block.y)
         }
       })
 
