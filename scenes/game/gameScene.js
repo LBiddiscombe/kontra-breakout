@@ -1,4 +1,18 @@
-import { Scene, Text, track, untrack, getCanvas, getPointer, emit, randInt, setStoreItem, getStoreItem } from 'kontra'
+import {
+  Scene,
+  Text,
+  Vector,
+  track,
+  untrack,
+  getCanvas,
+  getPointer,
+  emit,
+  on,
+  off,
+  randInt,
+  setStoreItem,
+  getStoreItem,
+} from 'kontra'
 import { createBall } from './ball'
 import { createPaddle } from './paddle'
 import { createPill } from './pill'
@@ -10,9 +24,9 @@ export function createGameScene(level = 0) {
   const carriedForwardScore = getStoreItem('breakoutScore') || 0
   const canvas = getCanvas()
   const pointer = getPointer()
+  const powerUpOdds = 1 //1 in 'this' blocks will spawn a powerup pill
 
   let pill = null
-
   let newLevelTimer
   let ball = createBall()
   let paddle = createPaddle()
@@ -36,16 +50,49 @@ export function createGameScene(level = 0) {
     width: canvas.width,
     height: canvas.height,
     children: [blocks, paddle, scoreUI],
-    pillActive: null,
-    pillActiveTimer: null,
+    powerUpActive: null,
+    powerUpCountdown: null,
     onShow: function () {
       track(paddle)
       track(scene)
+      on('powerUpOn', (type) => {
+        console.log('powerUpOn', type.name)
+        this.powerUpActive = type
+        this.powerUpCountdown = type.timeLimit
+        pill = null
+        switch (true) {
+          case type.name === 'BreakBall':
+            ball.color = 'yellow'
+            ball.accentColor = 'gold'
+            break
+          case type.name === 'StickyBall':
+            paddle.color = 'limegreen'
+            paddle.accentColor = 'seagreen'
+            break
+        }
+      })
+      on('powerUpOff', (type) => {
+        console.log('powerUpOff', type.name)
+        this.powerUpActive = null
+        this.powerUpCountdown = null
+        switch (true) {
+          case type.name === 'BreakBall':
+            ball.color = '#f0f0f1'
+            ball.accentColor = '#d4d3d5'
+            break
+          case type.name === 'StickyBall':
+            paddle.color = 'white'
+            paddle.accentColor = 'lightgrey'
+            break
+        }
+      })
     },
     onHide: function () {
       untrack(paddle)
       untrack(scene)
       clearTimeout(newLevelTimer)
+      off('powerUpOn')
+      off('powerUpOff')
     },
     onDown: function () {
       if (Math.abs(pointer.x - paddle.x) < paddle.width) paddle.pointerDown = true
@@ -66,22 +113,15 @@ export function createGameScene(level = 0) {
         // check collision of paddle and pill
         const collision = circleRect(pill, paddle)
         if (collision.collides) {
-          pill = null
-          this.pillActive = 'breakball'
-          this.pillActiveTimer = 300
-          ball.color = 'yellow'
-          ball.accentColor = 'gold'
+          emit('powerUpOn', pill.type)
         }
         if (pill && pill.y > canvas.height) pill = null
       }
 
-      if (this.pillActive) {
-        this.pillActiveTimer -= 1
-        if (this.pillActiveTimer <= 0) {
-          this.pillActive = null
-          this.pillActiveTimer = null
-          ball.color = '#f0f0f1'
-          ball.accentColor = '#d4d3d5'
+      if (this.powerUpActive) {
+        this.powerUpCountdown -= 1
+        if (this.powerUpCountdown <= 0) {
+          emit('powerUpOff', this.powerUpActive)
         }
       }
 
@@ -89,10 +129,10 @@ export function createGameScene(level = 0) {
 
       // if ball is held follow paddle
       if (paddle.holdingBall === true) {
-        ball.x = paddle.x
+        ball.x = paddle.x + paddle.heldBallOffsetX
+        ball.y = paddle.y - 20
       } else if (paddle.holdingBall === false && ball.velocity.length() === 0) {
-        ball.dy = -8
-        ball.dx = 2
+        ball.velocity = Vector(0.196, -0.981).scale(ball.speed)
       }
 
       // check collision of paddle and ball
@@ -100,6 +140,21 @@ export function createGameScene(level = 0) {
       if (collision.collides) {
         ball.position = collision.collisionPosition
         ball.velocity = collision.resolvedVelocity
+        if (this.powerUpActive && this.powerUpActive.name === 'StickyBall') {
+          paddle.holdingBall = true
+          paddle.heldBallOffsetX = ball.x - paddle.x
+          console.log(paddle.heldBallOffsetX)
+          switch (true) {
+            case paddle.heldBallOffsetX <= -15:
+              ball.velocity = Vector(-0.196, -0.981).scale(ball.speed)
+              break
+            case paddle.heldBallOffsetX >= 15:
+              ball.velocity = Vector(0.196, -0.981).scale(ball.speed)
+              break
+            default:
+              ball.velocity = Vector(0, -1).scale(ball.speed)
+          }
+        }
       }
 
       // check collision of blocks, only destroy 1 brick per update
@@ -110,17 +165,17 @@ export function createGameScene(level = 0) {
         if (collision.collides && collisionsActive) {
           collisionsActive = false
           block.ttl = 0
-          if (this.pillActive !== 'breakball') {
+          if (!this.powerUpActive || this.powerUpActive.name !== 'BreakBall') {
             ball.position = collision.collisionPosition
             ball.velocity = collision.resolvedVelocity
           }
           scoreUI.value += 1
           scoreUI.text = 'Score: ' + scoreUI.value
-          if (!pill && !this.pillActive && randInt(1, 5) === 1) pill = createPill(block.x, block.y)
+          if (!pill && !this.powerUpActive && randInt(1, powerUpOdds) === 1) pill = createPill(block.x, block.y)
         }
       })
 
-      // if ball drop game over
+      // if ball drops to bottom game over
       if (ball.y > canvas.height && ball.ttl > 0) {
         setStoreItem('breakoutScore', scoreUI.value)
         if (scoreUI.value > getStoreItem('breakoutHiscore')) {

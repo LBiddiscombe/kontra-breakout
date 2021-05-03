@@ -7,6 +7,7 @@ function createBall() {
     x: canvas.width / 2,
     y: canvas.height - 140,
     radius: 8,
+    speed: 8,
     anchor: { x: 0.5, y: 0.5 },
     color: '#f0f0f1',
     accentColor: '#d4d3d5',

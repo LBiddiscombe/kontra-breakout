@@ -15,6 +15,7 @@ function createPaddle() {
     deflectAngle: true,
     pointerDown: false,
     holdingBall: null,
+    heldBallOffsetX: 0,
     update: function () {
       this.advance()
     },
