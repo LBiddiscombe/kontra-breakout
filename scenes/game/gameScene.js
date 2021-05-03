@@ -1,6 +1,7 @@
 import { Scene, Text, track, untrack, getCanvas, getPointer, emit, randInt, setStoreItem, getStoreItem } from 'kontra'
 import { createBall } from './ball'
 import { createPaddle } from './paddle'
+import { createPill } from './pill'
 import { createBlocks, blocks } from './blocks'
 import { circleRect } from './collisions'
 import { numLevels } from './config'
@@ -9,6 +10,8 @@ export function createGameScene(level = 0) {
   const carriedForwardScore = getStoreItem('breakoutScore') || 0
   const canvas = getCanvas()
   const pointer = getPointer()
+
+  let pill = null
 
   let newLevelTimer
   let ball = createBall()
@@ -33,6 +36,8 @@ export function createGameScene(level = 0) {
     width: canvas.width,
     height: canvas.height,
     children: [blocks, paddle, scoreUI],
+    pillActive: null,
+    pillActiveTimer: null,
     onShow: function () {
       track(paddle)
       track(scene)
@@ -55,6 +60,31 @@ export function createGameScene(level = 0) {
     },
     update: function () {
       this.advance()
+
+      if (pill) {
+        pill.update()
+        // check collision of paddle and pill
+        const collision = circleRect(pill, paddle)
+        if (collision.collides) {
+          pill = null
+          this.pillActive = 'breakball'
+          this.pillActiveTimer = 300
+          ball.color = 'yellow'
+          ball.accentColor = 'gold'
+        }
+        if (pill && pill.y > canvas.height) pill = null
+      }
+
+      if (this.pillActive) {
+        this.pillActiveTimer -= 1
+        if (this.pillActiveTimer <= 0) {
+          this.pillActive = null
+          this.pillActiveTimer = null
+          ball.color = '#f0f0f1'
+          ball.accentColor = '#d4d3d5'
+        }
+      }
+
       if (ball.ttl > 0) ball.update()
 
       // if ball is held follow paddle
@@ -65,7 +95,7 @@ export function createGameScene(level = 0) {
         ball.dx = 2
       }
 
-      // check collision of paddle
+      // check collision of paddle and ball
       const collision = circleRect(ball, paddle)
       if (collision.collides) {
         ball.position = collision.collisionPosition
@@ -80,11 +110,13 @@ export function createGameScene(level = 0) {
         if (collision.collides && collisionsActive) {
           collisionsActive = false
           block.ttl = 0
-          ball.position = collision.collisionPosition
-          ball.velocity = collision.resolvedVelocity
-          // update score
+          if (this.pillActive !== 'breakball') {
+            ball.position = collision.collisionPosition
+            ball.velocity = collision.resolvedVelocity
+          }
           scoreUI.value += 1
           scoreUI.text = 'Score: ' + scoreUI.value
+          if (!pill && !pillActive && randInt(1, 5) === 1) pill = createPill(block.x, block.y)
         }
       })
 
@@ -111,6 +143,7 @@ export function createGameScene(level = 0) {
       this.draw()
 
       // custom rendering here
+      if (pill) pill.render()
       ball.render()
       blocks.render()
     },
