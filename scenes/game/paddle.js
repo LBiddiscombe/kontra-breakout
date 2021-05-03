@@ -11,6 +11,7 @@ function createPaddle() {
     height: 20,
     anchor: { x: 0.5, y: 0.5 },
     color: 'white',
+    accentColor: 'lightgrey',
     deflectAngle: true,
     pointerDown: false,
     holdingBall: null,
@@ -33,15 +34,15 @@ function createPaddle() {
     },
     render: function () {
       let shadowPath = new Path2D(
-        'm 90 5 c 5.5 0 10 4.5 10 10 c 0 2 0 -2 0 0 c 0 5.5 -4.5 10 -10 10 c -18 0 -62 0 -80 0 c -5.5 0 -10 -4.5 -10 -10 c 0 -2 0 2 0 0 c 0 -5.5 4.5 -10 10 -10 c 18 0 62 0 80 0 z'
+        'm 100 20 c 0 -8 -7 -20 -15 -20 l -70 0 c -8 0 -15 8 -15 20 c 0 9 12 0 20 0 l 60 0 c 8 0 20 9 20 0 z'
       )
       let path = new Path2D(
-        'm 90 0 c 5.5 0 10 4.5 10 10 c 0 2 0 -2 0 0 c 0 5.5 -4.5 10 -10 10 c -18 0 -62 0 -80 0 c -5.5 0 -10 -4.5 -10 -10 c 0 -2 0 2 0 0 c 0 -5.5 4.5 -10 10 -10 c 18 0 62 0 80 0 z'
+        'm 100 16 c 0 -8 -7 -16 -15 -16 l -70 0 c -8 0 -15 8 -15 16 c 0 9 12 0 20 0 l 60 0 c 8 0 20 9 20 0 z'
       )
 
-      this.context.fillStyle = 'lightgrey'
+      this.context.fillStyle = this.accentColor
       this.context.fill(shadowPath)
-      this.context.fillStyle = 'white'
+      this.context.fillStyle = this.color
       this.context.fill(path)
 
       // debug hitbox
