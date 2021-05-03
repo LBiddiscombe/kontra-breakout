@@ -56,7 +56,6 @@ export function createGameScene(level = 0) {
       track(paddle)
       track(scene)
       on('powerUpOn', (type) => {
-        console.log('powerUpOn', type.name)
         this.powerUpActive = type
         this.powerUpCountdown = type.timeLimit
         pill = null
@@ -72,7 +71,6 @@ export function createGameScene(level = 0) {
         }
       })
       on('powerUpOff', (type) => {
-        console.log('powerUpOff', type.name)
         this.powerUpActive = null
         this.powerUpCountdown = null
         switch (true) {
@@ -143,7 +141,6 @@ export function createGameScene(level = 0) {
         if (this.powerUpActive && this.powerUpActive.name === 'StickyBall') {
           paddle.holdingBall = true
           paddle.heldBallOffsetX = ball.x - paddle.x
-          console.log(paddle.heldBallOffsetX)
           switch (true) {
             case paddle.heldBallOffsetX <= -15:
               ball.velocity = Vector(-0.196, -0.981).scale(ball.speed)
@@ -188,6 +185,7 @@ export function createGameScene(level = 0) {
       if (aliveBlocks.length === 0 && !newLevelTimer) {
         setStoreItem('breakoutScore', scoreUI.value)
         ball.ttl = 0
+        pill = null
         newLevelTimer = setTimeout(() => {
           const newLevel = (level + 1) % numLevels
           emit('navigate', 'game', newLevel)
