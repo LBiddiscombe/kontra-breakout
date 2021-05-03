@@ -10,10 +10,16 @@ function createPill(x, y) {
       timeLimit: 300,
     },
     {
-      name: 'StickyBall',
+      name: 'StickyPaddle',
       label: 'S',
       color: 'limegreen',
       timeLimit: 600,
+    },
+    {
+      name: 'LaserPaddle',
+      label: 'L',
+      color: 'tomato',
+      timeLimit: 180,
     },
   ]
 

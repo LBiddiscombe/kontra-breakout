@@ -16,6 +16,7 @@ import {
 import { createBall } from './ball'
 import { createPaddle } from './paddle'
 import { createPill } from './pill'
+import { createLaser, lasers } from './laser'
 import { createBlocks, blocks } from './blocks'
 import { circleRect } from './collisions'
 import { numLevels } from './config'
@@ -31,6 +32,7 @@ export function createGameScene(level = 0) {
   let ball = createBall()
   let paddle = createPaddle()
   createBlocks(level)
+  lasers.clear()
 
   if (carriedForwardScore > 0) {
     paddle.holdingBall = true
@@ -49,7 +51,7 @@ export function createGameScene(level = 0) {
     id: 'game',
     width: canvas.width,
     height: canvas.height,
-    children: [blocks, paddle, scoreUI],
+    children: [blocks, paddle, scoreUI, lasers],
     powerUpActive: null,
     powerUpCountdown: null,
     onShow: function () {
@@ -64,25 +66,24 @@ export function createGameScene(level = 0) {
             ball.color = 'yellow'
             ball.accentColor = 'gold'
             break
-          case type.name === 'StickyBall':
+          case type.name === 'StickyPaddle':
             paddle.color = 'limegreen'
             paddle.accentColor = 'forestgreen'
+            break
+          case type.name === 'LaserPaddle':
+            paddle.color = 'tomato'
+            paddle.accentColor = 'firebrick'
+            lasers.clear()
             break
         }
       })
       on('powerUpOff', (type) => {
         this.powerUpActive = null
         this.powerUpCountdown = null
-        switch (true) {
-          case type.name === 'BreakBall':
-            ball.color = '#f0f0f1'
-            ball.accentColor = '#d4d3d5'
-            break
-          case type.name === 'StickyBall':
-            paddle.color = 'white'
-            paddle.accentColor = 'lightgrey'
-            break
-        }
+        ball.color = '#f0f0f1'
+        ball.accentColor = '#d4d3d5'
+        paddle.color = 'white'
+        paddle.accentColor = 'lightgrey'
       })
     },
     onHide: function () {
@@ -105,7 +106,6 @@ export function createGameScene(level = 0) {
     },
     update: function () {
       this.advance()
-
       if (pill) {
         pill.update()
         // check collision of paddle and pill
@@ -117,6 +117,10 @@ export function createGameScene(level = 0) {
       }
 
       if (this.powerUpActive) {
+        if (this.powerUpActive.name === 'LaserPaddle' && this.powerUpCountdown % 10 === 0) {
+          createLaser(paddle.x, paddle.y - 20)
+        }
+
         this.powerUpCountdown -= 1
         if (this.powerUpCountdown <= 0) {
           emit('powerUpOff', this.powerUpActive)
@@ -138,7 +142,7 @@ export function createGameScene(level = 0) {
       if (collision.collides) {
         ball.position = collision.collisionPosition
         ball.velocity = collision.resolvedVelocity
-        if (this.powerUpActive && this.powerUpActive.name === 'StickyBall') {
+        if (this.powerUpActive && this.powerUpActive.name === 'StickyPaddle') {
           paddle.holdingBall = true
           paddle.heldBallOffsetX = ball.x - paddle.x
           switch (true) {
@@ -158,6 +162,17 @@ export function createGameScene(level = 0) {
       let collisionsActive = true
       const aliveBlocks = blocks.getAliveObjects()
       aliveBlocks.forEach((block) => {
+        const aliveLasers = lasers.getAliveObjects()
+        aliveLasers.forEach((laser) => {
+          const collision = circleRect(laser, block)
+          if (collision.collides) {
+            block.ttl = 0
+            laser.ttl = 0
+            scoreUI.value += 1
+            scoreUI.text = 'Score: ' + scoreUI.value
+          }
+        })
+
         const collision = circleRect(ball, block)
         if (collision.collides && collisionsActive) {
           collisionsActive = false
@@ -186,6 +201,8 @@ export function createGameScene(level = 0) {
         setStoreItem('breakoutScore', scoreUI.value)
         ball.ttl = 0
         pill = null
+        emit('powerUpOff', this.powerUpActive)
+        lasers.clear()
         newLevelTimer = setTimeout(() => {
           const newLevel = (level + 1) % numLevels
           emit('navigate', 'game', newLevel)
@@ -199,6 +216,7 @@ export function createGameScene(level = 0) {
       if (pill) pill.render()
       ball.render()
       blocks.render()
+      lasers.render()
     },
   })
 
