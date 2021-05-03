@@ -64,8 +64,8 @@ function circleRect(circle, rect) {
   //top: Vector(0, -1) in middle, (-0.196, -0.981) on left, (0.196, -0.981) on right
   if (isTop && rect.deflectAngle) {
     const currentAngle = vectorAngle(circle.velocity)
-    if (closest.x <= rect.x - rect.width / 3 && currentAngle < 135) edge = Vector(-0.196, -0.981)
-    if (closest.x >= rect.x + rect.width / 3 && currentAngle > 45) edge = Vector(0.196, -0.981)
+    if (closest.x <= rect.x - rect.width / 4 && currentAngle < 135) edge = Vector(-0.196, -0.981)
+    if (closest.x >= rect.x + rect.width / 4 && currentAngle > 45) edge = Vector(0.196, -0.981)
   }
 
   resolvedVelocity = vectorReflect(circle, edge)
