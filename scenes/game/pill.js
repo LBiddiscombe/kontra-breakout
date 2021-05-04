@@ -4,6 +4,18 @@ import { choose } from '../../shared/helpers'
 function createPill(x, y) {
   const types = [
     {
+      name: 'SlowerBall',
+      label: 'SB',
+      color: '#B1B7BF',
+      timeLimit: 300,
+    },
+    {
+      name: 'FasterBall',
+      label: 'FB',
+      color: '#D42434',
+      timeLimit: 300,
+    },
+    {
       name: 'BreakBall',
       label: 'BB',
       color: 'gold',
@@ -11,7 +23,7 @@ function createPill(x, y) {
     },
     {
       name: 'StickyPaddle',
-      label: 'SP',
+      label: 'ST',
       color: 'limegreen',
       timeLimit: 600,
     },
@@ -22,16 +34,16 @@ function createPill(x, y) {
       timeLimit: 180,
     },
     {
-      name: 'SlowerBall',
-      label: 'SB',
-      color: '#B1B7BF',
-      timeLimit: 60,
+      name: 'ExpandPaddle',
+      label: 'EP',
+      color: '#B1D9EF',
+      timeLimit: 600,
     },
     {
-      name: 'FasterBall',
-      label: 'FB',
-      color: '#D42434',
-      timeLimit: 60,
+      name: 'ShrinkPaddle',
+      label: 'SP',
+      color: '#DC644C',
+      timeLimit: 600,
     },
   ]
 

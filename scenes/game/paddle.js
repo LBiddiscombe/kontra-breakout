@@ -1,4 +1,4 @@
-import { Sprite, getCanvas, getPointer } from 'kontra'
+import { Sprite, getCanvas, getPointer, lerp } from 'kontra'
 
 function createPaddle() {
   const canvas = getCanvas()
@@ -7,7 +7,8 @@ function createPaddle() {
   let paddle = Sprite({
     x: canvas.width / 2,
     y: canvas.height - 120,
-    width: 100,
+    targetWidth: 90,
+    width: 90,
     height: 20,
     anchor: { x: 0.5, y: 0.5 },
     color: 'white',
@@ -33,13 +34,25 @@ function createPaddle() {
       if (this.pointerDown) {
         paddle.x = pointer.x
       }
+
+      if (this.width !== this.targetWidth) {
+        if (Math.abs(this.targetWidth - this.width) > 1) {
+          this.width = lerp(this.width, this.targetWidth, 0.1)
+        } else {
+          this.width = this.targetWidth
+        }
+      }
     },
     render: function () {
       let shadowPath = new Path2D(
-        'm 100 20 c 0 -8 -7 -20 -15 -20 l -70 0 c -8 0 -15 8 -15 20 c 0 9 12 0 20 0 l 60 0 c 8 0 20 9 20 0 z'
+        `m ${this.width} 20 c 0 -8 -7 -20 -15 -20 l -${this.width - 30} 0 c -8 0 -15 8 -15 20 c 0 9 12 0 20 0 l ${
+          this.width - 40
+        } 0 c 8 0 20 9 20 0 z`
       )
       let path = new Path2D(
-        'm 100 16 c 0 -8 -7 -16 -15 -16 l -70 0 c -8 0 -15 8 -15 16 c 0 9 12 0 20 0 l 60 0 c 8 0 20 9 20 0 z'
+        `m ${this.width} 16 c 0 -8 -7 -16 -15 -16 l -${this.width - 30} 0 c -8 0 -15 8 -15 16 c 0 9 12 0 20 0 l ${
+          this.width - 40
+        } 0 c 8 0 20 9 20 0 z`
       )
 
       this.context.fillStyle = this.accentColor

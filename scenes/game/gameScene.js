@@ -34,12 +34,6 @@ export function createGameScene(level = 0) {
   createBlocks(level)
   lasers.clear()
 
-  function setBallVelocity(speed) {
-    ball.speed = speed
-    const currentDirection = ball.velocity.normalize()
-    ball.velocity = currentDirection.scale(ball.speed)
-  }
-
   if (carriedForwardScore > 0) {
     paddle.holdingBall = true
   }
@@ -75,10 +69,10 @@ export function createGameScene(level = 0) {
             ball.willBounce = false
             break
           case type.name === 'SlowerBall':
-            setBallVelocity(Math.max((ball.speed - 4).toFixed(1), 4))
+            ball.targetSpeed = Math.max((ball.speed - 4).toFixed(1), 4)
             break
           case type.name === 'FasterBall':
-            setBallVelocity(Math.min((ball.speed + 4).toFixed(1), 16))
+            ball.targetSpeed = Math.min((ball.speed + 4).toFixed(1), 16)
             break
           case type.name === 'StickyPaddle':
             paddle.color = 'limegreen'
@@ -89,6 +83,16 @@ export function createGameScene(level = 0) {
             paddle.color = 'tomato'
             paddle.accentColor = 'firebrick'
             lasers.clear()
+            break
+          case type.name === 'ExpandPaddle':
+            paddle.color = type.color
+            paddle.accentColor = '#5F97BD'
+            paddle.targetWidth = 120
+            break
+          case type.name === 'ShrinkPaddle':
+            paddle.color = type.color
+            paddle.accentColor = '#C05046'
+            paddle.targetWidth = 60
             break
         }
       })
@@ -101,6 +105,9 @@ export function createGameScene(level = 0) {
         paddle.color = 'white'
         paddle.accentColor = 'lightgrey'
         paddle.sticky = false
+        paddle.targetWidth = 90
+        if (type.name === 'FasterBall') ball.targetSpeed = Math.max((ball.speed - 4).toFixed(1), 10)
+        if (type.name === 'SlowerBall') ball.targetSpeed = Math.min((ball.speed + 4).toFixed(1), 10)
       })
     },
     onHide: function () {
@@ -127,8 +134,9 @@ export function createGameScene(level = 0) {
       this.frameCounter += 1
 
       // increase ball speed over time
-      if (this.frameCounter % 120 === 0 && paddle.holdingBall === false) {
-        setBallVelocity(Math.min((ball.speed + 0.2).toFixed(1), 16))
+      if (this.frameCounter % 120 === 0 && paddle.holdingBall === false && paddle.speed === paddle.targetSpeed) {
+        ball.targetSpeed = Math.min((ball.speed + 0.2).toFixed(1), 16)
+        ball.speed = Math.min((ball.speed + 0.2).toFixed(1), 16)
       }
 
       if (pill) {
@@ -226,7 +234,6 @@ export function createGameScene(level = 0) {
         setStoreItem('breakoutScore', scoreUI.value)
         ball.ttl = 0
         pill = null
-        emit('powerUpOff', this.powerUpActive)
         lasers.clear()
         newLevelTimer = setTimeout(() => {
           const newLevel = (level + 1) % numLevels

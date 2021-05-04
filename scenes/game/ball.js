@@ -1,4 +1,4 @@
-import { Sprite, getCanvas } from 'kontra'
+import { Sprite, getCanvas, lerp } from 'kontra'
 
 function createBall() {
   const canvas = getCanvas()
@@ -7,6 +7,7 @@ function createBall() {
     x: canvas.width / 2,
     y: canvas.height - 140,
     radius: 8,
+    targetSpeed: 8,
     speed: 8,
     anchor: { x: 0.5, y: 0.5 },
     color: '#f0f0f1',
@@ -14,6 +15,15 @@ function createBall() {
     willBounce: true,
     update: function () {
       this.advance()
+
+      if (this.speed !== this.targetSpeed) {
+        if (Math.abs(this.targetSpeed - this.speed) > 0.2) {
+          setBallVelocity(lerp(this.speed, this.targetSpeed, 0.05))
+        } else {
+          this.speed = this.targetSpeed
+        }
+      }
+
       if (this.x < this.radius) {
         this.dx *= -1
         this.x = this.radius + 1
@@ -39,6 +49,12 @@ function createBall() {
       this.context.fill()
     },
   })
+
+  function setBallVelocity(speed) {
+    ball.speed = speed
+    const currentDirection = ball.velocity.normalize()
+    ball.velocity = currentDirection.scale(ball.speed)
+  }
 
   return ball
 }
