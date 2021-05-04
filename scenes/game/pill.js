@@ -5,21 +5,33 @@ function createPill(x, y) {
   const types = [
     {
       name: 'BreakBall',
-      label: 'B',
+      label: 'BB',
       color: 'gold',
       timeLimit: 300,
     },
     {
       name: 'StickyPaddle',
-      label: 'S',
+      label: 'SP',
       color: 'limegreen',
       timeLimit: 600,
     },
     {
       name: 'LaserPaddle',
-      label: 'L',
+      label: 'LP',
       color: 'tomato',
       timeLimit: 180,
+    },
+    {
+      name: 'SlowerBall',
+      label: 'SB',
+      color: '#B1B7BF',
+      timeLimit: 60,
+    },
+    {
+      name: 'FasterBall',
+      label: 'FB',
+      color: '#D42434',
+      timeLimit: 60,
     },
   ]
 
@@ -28,15 +40,15 @@ function createPill(x, y) {
   let label = Text({
     text: type.label,
     color: 'black',
-    font: 'Bold 14px Monospace',
-    anchor: { x: 0.5, y: 0.5 },
+    font: 'Bold 14px sans-serif',
+    anchor: { x: 0.5, y: 0.6 },
   })
 
   let pill = Sprite({
     x,
     y,
     dy: 4,
-    radius: 10,
+    radius: 14,
     anchor: { x: 0.5, y: 0.5 },
     color: type.color,
     type,

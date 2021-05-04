@@ -34,6 +34,12 @@ export function createGameScene(level = 0) {
   createBlocks(level)
   lasers.clear()
 
+  function setBallVelocity(speed) {
+    ball.speed = speed
+    const currentDirection = ball.velocity.normalize()
+    ball.velocity = currentDirection.scale(ball.speed)
+  }
+
   if (carriedForwardScore > 0) {
     paddle.holdingBall = true
   }
@@ -66,10 +72,18 @@ export function createGameScene(level = 0) {
           case type.name === 'BreakBall':
             ball.color = 'yellow'
             ball.accentColor = 'gold'
+            ball.willBounce = false
+            break
+          case type.name === 'SlowerBall':
+            setBallVelocity(Math.max((ball.speed - 4).toFixed(1), 4))
+            break
+          case type.name === 'FasterBall':
+            setBallVelocity(Math.min((ball.speed + 4).toFixed(1), 16))
             break
           case type.name === 'StickyPaddle':
             paddle.color = 'limegreen'
             paddle.accentColor = 'forestgreen'
+            paddle.sticky = true
             break
           case type.name === 'LaserPaddle':
             paddle.color = 'tomato'
@@ -83,8 +97,10 @@ export function createGameScene(level = 0) {
         this.powerUpCountdown = null
         ball.color = '#f0f0f1'
         ball.accentColor = '#d4d3d5'
+        ball.willBounce = true
         paddle.color = 'white'
         paddle.accentColor = 'lightgrey'
+        paddle.sticky = false
       })
     },
     onHide: function () {
@@ -112,9 +128,7 @@ export function createGameScene(level = 0) {
 
       // increase ball speed over time
       if (this.frameCounter % 120 === 0 && paddle.holdingBall === false) {
-        ball.speed = Math.min((ball.speed + 0.2).toFixed(1), 16)
-        const currentDirection = ball.velocity.normalize()
-        ball.velocity = currentDirection.scale(ball.speed)
+        setBallVelocity(Math.min((ball.speed + 0.2).toFixed(1), 16))
       }
 
       if (pill) {
@@ -153,7 +167,7 @@ export function createGameScene(level = 0) {
       if (collision.collides) {
         ball.position = collision.collisionPosition
         ball.velocity = collision.resolvedVelocity
-        if (this.powerUpActive && this.powerUpActive.name === 'StickyPaddle') {
+        if (paddle.sticky) {
           paddle.holdingBall = true
           paddle.heldBallOffsetX = ball.x - paddle.x
           switch (true) {
@@ -188,7 +202,7 @@ export function createGameScene(level = 0) {
         if (collision.collides && collisionsActive) {
           collisionsActive = false
           block.ttl = 0
-          if (!this.powerUpActive || this.powerUpActive.name !== 'BreakBall') {
+          if (ball.willBounce) {
             ball.position = collision.collisionPosition
             ball.velocity = collision.resolvedVelocity
           }

@@ -11,15 +11,20 @@ function createBall() {
     anchor: { x: 0.5, y: 0.5 },
     color: '#f0f0f1',
     accentColor: '#d4d3d5',
+    willBounce: true,
     update: function () {
       this.advance()
-      if (ball.x < this.radius || ball.x > canvas.width - this.radius) {
-        ball.dx *= -1
-        ball.x += ball.dx
+      if (this.x < this.radius) {
+        this.dx *= -1
+        this.x = this.radius + 1
       }
-      if (ball.y < this.radius) {
-        ball.dy *= -1
-        ball.y += ball.dy
+      if (this.x > canvas.width - this.radius) {
+        this.dx *= -1
+        this.x = canvas.width - this.radius - 1
+      }
+      if (this.y < this.radius) {
+        this.dy *= -1
+        this.y = this.radius + 1
       }
     },
     render: function () {
