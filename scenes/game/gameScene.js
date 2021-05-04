@@ -54,6 +54,7 @@ export function createGameScene(level = 0) {
     children: [blocks, paddle, scoreUI, lasers],
     powerUpActive: null,
     powerUpCountdown: null,
+    frameCounter: 0,
     onShow: function () {
       track(paddle)
       track(scene)
@@ -106,6 +107,16 @@ export function createGameScene(level = 0) {
     },
     update: function () {
       this.advance()
+
+      this.frameCounter += 1
+
+      // increase ball speed over time
+      if (this.frameCounter % 120 === 0 && paddle.holdingBall === false) {
+        ball.speed = Math.min((ball.speed + 0.2).toFixed(1), 16)
+        const currentDirection = ball.velocity.normalize()
+        ball.velocity = currentDirection.scale(ball.speed)
+      }
+
       if (pill) {
         pill.update()
         // check collision of paddle and pill
