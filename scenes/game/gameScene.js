@@ -18,6 +18,7 @@ import { createPaddle } from './paddle'
 import { createPill } from './pill'
 import { createLaser, lasers } from './laser'
 import { createBlocks, blocks } from './blocks'
+import { explodeBlock, explodingBlocks } from './explodingBlock'
 import { circleRect } from './collisions'
 import { numLevels } from './config'
 
@@ -51,7 +52,7 @@ export function createGameScene(level = 0) {
     id: 'game',
     width: canvas.width,
     height: canvas.height,
-    children: [blocks, paddle, scoreUI, lasers],
+    children: [blocks, paddle, scoreUI, lasers, explodingBlocks],
     powerUpActive: null,
     powerUpCountdown: null,
     frameCounter: 0,
@@ -200,6 +201,7 @@ export function createGameScene(level = 0) {
           const collision = circleRect(laser, block)
           if (collision.collides) {
             block.ttl = 0
+            explodeBlock(block.x, block.y, block.width, block.height, block.color)
             laser.ttl = 0
             scoreUI.value += 1
             scoreUI.text = 'Score: ' + scoreUI.value
@@ -210,6 +212,7 @@ export function createGameScene(level = 0) {
         if (collision.collides && collisionsActive) {
           collisionsActive = false
           block.ttl = 0
+          explodeBlock(block.x, block.y, block.width, block.height, block.color)
           if (ball.willBounce) {
             ball.position = collision.collisionPosition
             ball.velocity = collision.resolvedVelocity
@@ -249,6 +252,7 @@ export function createGameScene(level = 0) {
       ball.render()
       blocks.render()
       lasers.render()
+      explodingBlocks.render()
     },
   })
 
