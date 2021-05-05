@@ -7,19 +7,19 @@ export function createGameOverScene() {
   let lose = Text({
     text: 'Game Over',
     color: '#ff073a',
-    font: '48px Bowlby One SC',
+    font: '48px Lalezar',
   })
 
   let score = Text({
     text: '',
     color: '#4deeea',
-    font: '48px Bowlby One SC',
+    font: '48px Lalezar',
   })
 
   let hiscore = Text({
     text: '',
     color: '#ffe700',
-    font: '24px Bowlby One SC',
+    font: '24px Lalezar',
   })
 
   let loseGrid = Grid({

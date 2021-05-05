@@ -15,34 +15,34 @@ export function createMenuScene() {
   let tapToStart = Text({
     text: 'Tap to Start',
     color: '#74ee15',
-    font: '32px Bowlby One SC',
+    font: '32px Lalezar',
     anchor: { x: 0.5, y: 0.5 },
   })
 
   let instructions = Text({
     text: "It's Breakout, you know the deal",
     color: '#4deeea',
-    font: '16px Bowlby One SC',
+    font: '16px Lalezar',
     anchor: { x: 0.5, y: 0.5 },
   })
 
   let lastScore = Text({
     text: 'Last Score',
     color: '#4deeea',
-    font: '24px Bowlby One SC',
+    font: '24px Lalezar',
   })
 
   let hiScore = Text({
     text: 'Hi Score',
     color: '#ffe700',
-    font: '24px Bowlby One SC',
+    font: '24px Lalezar',
   })
 
   let countdown = Text({
     text: '3',
     value: 3,
     color: '#74ee15',
-    font: '64px Bowlby One SC',
+    font: '64px Lalezar',
   })
 
   let menu = Grid({

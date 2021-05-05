@@ -15,7 +15,13 @@ export function createBootScene() {
 
   let preloadFont1 = Text({
     color: '#FF7F00',
-    font: '48px Bowlby One SC',
+    font: '48px Lalezar',
+    anchor: { x: 0.5, y: 0.5 },
+  })
+
+  let preloadFont2 = Text({
+    color: '#FF7F00',
+    font: '48px Lalezar',
     anchor: { x: 0.5, y: 0.5 },
   })
 

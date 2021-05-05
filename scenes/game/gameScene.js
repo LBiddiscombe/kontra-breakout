@@ -45,7 +45,7 @@ export function createGameScene(level = 0) {
     y: 10,
     text: `Score: ${carriedForwardScore}`,
     color: 'white',
-    font: '32px Bowlby One SC',
+    font: '32px Lalezar',
   })
 
   let scene = Scene({
