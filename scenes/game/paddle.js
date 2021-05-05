@@ -15,7 +15,7 @@ function createPaddle() {
     accentColor: 'lightgrey',
     deflectAngle: true,
     pointerDown: false,
-    holdingBall: null,
+    holdingBall: true,
     heldBallOffsetX: 0,
     sticky: false,
     update: function () {

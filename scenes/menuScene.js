@@ -66,7 +66,7 @@ export function createMenuScene() {
     onHide: function () {
       untrack(scene)
     },
-    onDown: function () {
+    onUp: function () {
       menu.children = [tapToStart, instructions, countdown]
       setStoreItem('breakoutScore', undefined)
       emit('navigate', 'game', 0)

@@ -123,9 +123,7 @@ export function createGameScene(level = 0) {
     },
     onUp: function () {
       paddle.pointerDown = false
-      if (paddle.holdingBall === null) {
-        paddle.holdingBall = true
-      } else if (paddle.holdingBall) {
+      if (paddle.holdingBall) {
         paddle.holdingBall = false
       }
     },
