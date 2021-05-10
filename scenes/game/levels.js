@@ -1,4 +1,6 @@
-const levels = [
+import { shuffle } from '../../shared/helpers'
+
+const levels = shuffle([
   [
     [' ', ' ', ' ', 'X', 'X', ' ', ' ', ' '],
     [' ', ' ', 'X', 'X', 'X', 'X', ' ', ' '],
@@ -79,6 +81,6 @@ const levels = [
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
   ],
-]
+])
 
 export { levels }
