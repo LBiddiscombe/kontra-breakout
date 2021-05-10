@@ -21,6 +21,7 @@ import { createBlocks, blocks } from './blocks'
 import { explodeBlock, explodingBlocks } from './explodingBlock'
 import { circleRect } from './collisions'
 import { numLevels } from './config'
+import { shuffleLevels } from './levels'
 
 export function createGameScene(level = 0) {
   const carriedForwardScore = getStoreItem('breakoutScore') || 0
@@ -28,16 +29,18 @@ export function createGameScene(level = 0) {
   const pointer = getPointer()
   const powerUpOdds = 5 //1 in 'this' blocks will spawn a powerup pill
 
-  let pill = null
+  //let pill = null
+  let pills = []
   let newLevelTimer
   let ball = createBall()
   let paddle = createPaddle()
-  createBlocks(level)
   lasers.clear()
 
   if (carriedForwardScore > 0) {
     paddle.holdingBall = true
-  }
+  } else shuffleLevels()
+
+  createBlocks(level)
 
   let scoreUI = Text({
     value: carriedForwardScore,
@@ -62,7 +65,6 @@ export function createGameScene(level = 0) {
       on('powerUpOn', (type) => {
         this.powerUpActive = type
         this.powerUpCountdown = type.timeLimit
-        pill = null
         switch (true) {
           case type.name === 'BreakBall':
             ball.color = 'yellow'
@@ -138,15 +140,18 @@ export function createGameScene(level = 0) {
         ball.speed = Math.min((ball.speed + 0.2).toFixed(1), 16)
       }
 
-      if (pill) {
+      pills.forEach((pill) => {
         pill.update()
         // check collision of paddle and pill
         const collision = circleRect(pill, paddle)
         if (collision.collides) {
+          //emit('powerUpOff', this.powerUpActive)
           emit('powerUpOn', pill.type)
+          pill.ttl = 0
         }
-        if (pill && pill.y > canvas.height) pill = null
-      }
+        if (pill && pill.y > canvas.height) pill.ttl = 0
+      })
+      pills = pills.filter((pill) => pill.isAlive())
 
       if (this.powerUpActive) {
         if (this.powerUpActive.name === 'LaserPaddle' && this.powerUpCountdown % 10 === 0) {
@@ -203,6 +208,7 @@ export function createGameScene(level = 0) {
             laser.ttl = 0
             scoreUI.value += 1
             scoreUI.text = 'Score: ' + scoreUI.value
+            if (randInt(1, powerUpOdds) === 1) pills.push(createPill(block.x, block.y))
           }
         })
 
@@ -217,7 +223,7 @@ export function createGameScene(level = 0) {
           }
           scoreUI.value += 1
           scoreUI.text = 'Score: ' + scoreUI.value
-          if (!pill && !this.powerUpActive && randInt(1, powerUpOdds) === 1) pill = createPill(block.x, block.y)
+          if (randInt(1, powerUpOdds) === 1) pills.push(createPill(block.x, block.y))
         }
       })
 
@@ -234,7 +240,7 @@ export function createGameScene(level = 0) {
       if (aliveBlocks.length === 0 && !newLevelTimer) {
         setStoreItem('breakoutScore', scoreUI.value)
         ball.ttl = 0
-        pill = null
+        pills = []
         lasers.clear()
         newLevelTimer = setTimeout(() => {
           const newLevel = (level + 1) % numLevels
@@ -246,7 +252,7 @@ export function createGameScene(level = 0) {
       this.draw()
 
       // custom rendering here
-      if (pill) pill.render()
+      pills.forEach((pill) => pill.render())
       ball.render()
       blocks.render()
       lasers.render()

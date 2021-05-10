@@ -1,6 +1,6 @@
 import { shuffle } from '../../shared/helpers'
 
-const levels = shuffle([
+let levels = [
   [
     [' ', ' ', ' ', 'X', 'X', ' ', ' ', ' '],
     [' ', ' ', 'X', 'X', 'X', 'X', ' ', ' '],
@@ -81,6 +81,10 @@ const levels = shuffle([
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
     ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
   ],
-])
+]
 
-export { levels }
+function shuffleLevels() {
+  levels = shuffle(levels)
+}
+
+export { levels, shuffleLevels }
