@@ -26,6 +26,7 @@ function explodeBlock(parentX, parentY, parentWidth = canvas.width / 9, parentHe
   }
 
   for (let i = 0; i < particleCount; i++) {
+    const size = 4
     explodingBlocks.get({
       x: parentX + randInt(-parentWidth / 4, parentWidth / 4),
       y: parentY + randInt(-parentHeight / 4, parentHeight / 4),
@@ -33,10 +34,11 @@ function explodeBlock(parentX, parentY, parentWidth = canvas.width / 9, parentHe
       dy: -12,
       ddy: Math.random() + 1,
       ttl: 30,
-      width: randInt(1, 3),
-      height: randInt(1, 3),
+      width: size,
+      height: size,
       anchor: { x: 0.5, y: 0.5 },
-      color: 'white',
+      color,
+      opacity: 0.5,
     })
   }
 }
