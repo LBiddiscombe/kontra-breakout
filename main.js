@@ -42,7 +42,7 @@ let loop = GameLoop({
     currentScene.update()
   },
   render: function () {
-    background.render()
+    //background.render()
     currentScene.render()
   },
 })
