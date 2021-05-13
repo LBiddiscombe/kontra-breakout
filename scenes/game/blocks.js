@@ -16,8 +16,7 @@ function createBlocks(level) {
   const offsetX = (canvas.width - (cols - 1) * (width + padding)) / 2
   const offsetY = canvas.height / 7
 
-  const colors = generateHslColors(100, 60, rows)
-  const colors2 = generateHslColors(100, 40, rows)
+  const colors = generateHslColors(100, 67, rows)
 
   blocks.clear()
 
@@ -32,13 +31,6 @@ function createBlocks(level) {
         anchor: { x: 0.5, y: 0.5 },
         deflectAngle: false,
         color: `hsla(${colors[i]})`,
-        color2: `hsla(${colors2[i]})`,
-        render: function () {
-          this.draw()
-          this.context.beginPath()
-          this.context.fillStyle = this.color2
-          this.context.fillRect(0, this.height * 0.66, this.width, this.height * 0.34)
-        },
       })
     }
   }

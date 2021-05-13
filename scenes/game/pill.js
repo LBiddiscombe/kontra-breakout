@@ -53,7 +53,7 @@ function createPill(x, y) {
     text: type.label,
     color: 'black',
     font: 'Bold 14px sans-serif',
-    anchor: { x: 0.5, y: 0.6 },
+    anchor: { x: 0.5, y: 0.7 },
   })
 
   let pill = Sprite({
@@ -61,17 +61,12 @@ function createPill(x, y) {
     y,
     dy: 4,
     radius: 14,
+    width: 30,
+    height: 30,
     anchor: { x: 0.5, y: 0.5 },
     color: type.color,
     type,
     children: [label],
-    render: function () {
-      //let path = new Path2D('m24 8c0-4-4-8-8-8l-8 0c-4 0-8 4-8 8c0 4 4 8 8 8l8 0c4 0 8-4 8-8z')
-      this.context.fillStyle = this.color
-      this.context.beginPath()
-      this.context.arc(0, 0, this.radius, 0, Math.PI * 2)
-      this.context.fill()
-    },
   })
 
   return pill

@@ -10,7 +10,7 @@ function createBall() {
     targetSpeed: 8,
     speed: 8,
     anchor: { x: 0.5, y: 0.5 },
-    color: '#f0f0f1',
+    color: '#ffffff',
     accentColor: '#d4d3d5',
     willBounce: true,
     update: function () {
